@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遊戲程式作品集</title>
+<meta name="description" content="Unity / Unreal / Cocos Creator 客戶端開發，.NET 後端 SDK 與服務，k8s 可觀測性。2021–2026 作品集。">
+<style>
+:root{
+  --bg:#0a0d13; --bg2:#0e1219; --panel:#141a24; --panel2:#1a212d;
+  --line:#232c3a; --line2:#2e3a4d;
+  --tx:#e6ecf5; --tx2:#a8b6ca; --tx3:#6f7f96;
+  --ac:#4fd1c5; --ac2:#f0a54a; --ac3:#7aa2f7;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --max:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--sans);
+  font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:var(--ac);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+a:hover{border-bottom-color:var(--ac)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(10,13,19,.86);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:0 24px;display:flex;
+  align-items:center;gap:6px;height:52px;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav-in a{color:var(--tx3);font-size:13px;padding:6px 11px;border-radius:6px;
+  white-space:nowrap;border:0;transition:color .15s,background .15s}
+.nav-in a:hover{color:var(--tx);background:var(--panel)}
+.nav-in .brand{color:var(--tx);font-weight:600;margin-right:auto;padding-left:0;font-size:14px;letter-spacing:.02em}
+
+/* ---------- layout ---------- */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+section{padding:76px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+
+/* ---------- hero ---------- */
+header.hero{padding:88px 0 40px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ac);margin-bottom:20px}
+h1{font-size:clamp(32px,5.4vw,50px);line-height:1.18;margin:0 0 22px;
+  font-weight:700;letter-spacing:-.02em}
+.lede{font-size:17px;color:var(--tx2);max-width:660px;margin:0 0 34px;line-height:1.8}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:11px 15px;min-width:112px}
+.stat b{display:block;font-size:19px;font-family:var(--mono);color:var(--ac);
+  font-weight:600;line-height:1.3}
+.stat span{font-size:11.5px;color:var(--tx3);letter-spacing:.03em}
+
+/* ---------- section heads ---------- */
+.sec-head{margin-bottom:40px}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--ac2);
+  letter-spacing:.14em;margin-bottom:10px}
+h2{font-size:27px;margin:0 0 6px;font-weight:650;letter-spacing:-.01em}
+.sec-meta{color:var(--tx3);font-size:13.5px;font-family:var(--mono)}
+h3{font-size:19px;margin:0 0 8px;font-weight:620}
+h4{font-size:14.5px;margin:0 0 10px;font-weight:620;color:var(--tx)}
+
+/* ---------- project blocks ---------- */
+.proj{border:1px solid var(--line);border-radius:12px;background:var(--bg2);
+  padding:30px;margin-bottom:22px}
+.proj.hero-proj{border-color:var(--line2);
+  background:linear-gradient(180deg,#131b26 0%,var(--bg2) 55%)}
+.proj-top{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  padding:4px 9px;border-radius:5px;background:rgba(79,209,197,.11);
+  color:var(--ac);border:1px solid rgba(79,209,197,.28);white-space:nowrap;
+  text-transform:uppercase;margin-top:3px}
+.badge.warm{background:rgba(240,165,74,.11);color:var(--ac2);border-color:rgba(240,165,74,.28)}
+.badge.plain{background:var(--panel2);color:var(--tx3);border-color:var(--line2)}
+.summary{color:var(--tx2);margin:0 0 20px;max-width:760px}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 20px}
+.chip{font-family:var(--mono);font-size:11.5px;padding:4px 10px;border-radius:20px;
+  background:var(--panel);border:1px solid var(--line);color:var(--tx2)}
+.chip.hi{border-color:rgba(79,209,197,.34);color:var(--ac);background:rgba(79,209,197,.07)}
+
+ul.pts{margin:0 0 20px;padding:0;list-style:none}
+ul.pts li{position:relative;padding-left:19px;margin-bottom:7px;color:var(--tx2);font-size:14.5px}
+ul.pts li::before{content:"";position:absolute;left:3px;top:11px;width:5px;height:5px;
+  border-radius:50%;background:var(--ac);opacity:.65}
+ul.pts li b{color:var(--tx);font-weight:600}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px}
+.note{border-left:2px solid var(--ac2);padding:2px 0 2px 15px;margin:18px 0;
+  color:var(--tx2);font-size:14px}
+.note b{color:var(--ac2);font-weight:600}
+
+/* ---------- figures ---------- */
+.figs{display:grid;gap:14px;margin:22px 0 0}
+.figs.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.figs.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.figs.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.figs.g5{grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
+figure{margin:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;
+  background:var(--panel);cursor:zoom-in;transition:border-color .18s,transform .18s}
+figure:hover{border-color:var(--line2);transform:translateY(-2px)}
+figure{display:flex;flex-direction:column}
+figure img{width:100%;height:auto;background:#0b0f16}
+.figs figure img{aspect-ratio:16/10;object-fit:contain}
+.figs.tall figure img{aspect-ratio:3/4}
+.figs.free figure img{aspect-ratio:auto;object-fit:fill}
+figure figcaption{margin-top:auto}
+figure figcaption{padding:9px 12px;font-size:12px;color:var(--tx3);
+  line-height:1.55;border-top:1px solid var(--line)}
+
+/* ---------- api cards ---------- */
+.api-grid{display:grid;gap:18px;grid-template-columns:1fr}
+.api{border:1px solid var(--line);border-radius:11px;background:var(--bg2);
+  padding:24px;display:grid;gap:20px;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+  align-items:start}
+.api-svg{background:#0d1219;border:1px solid var(--line);border-radius:8px;padding:12px}
+.api-svg svg{width:100%;height:auto;display:block}
+.api h3{margin-bottom:6px}
+.api .one{color:var(--tx2);font-size:14px;margin:0 0 14px}
+.hook{border-top:1px solid var(--line);padding-top:12px;margin-top:2px;
+  font-size:13.5px;color:var(--tx2)}
+.hook::before{content:"▸ ";color:var(--ac2)}
+
+/* ---------- video ---------- */
+.vid{position:relative;aspect-ratio:16/9;border-radius:9px;overflow:hidden;
+  border:1px solid var(--line);background:#000;cursor:pointer}
+.vid.r43{aspect-ratio:4/3}
+.vid img{width:100%;height:100%;object-fit:cover;opacity:.62;transition:opacity .2s}
+.vid:hover img{opacity:.82}
+.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none}
+.play i{width:56px;height:56px;border-radius:50%;background:rgba(10,13,19,.72);
+  border:1.5px solid rgba(255,255,255,.55);display:flex;align-items:center;
+  justify-content:center;backdrop-filter:blur(3px)}
+.play i::after{content:"";border-left:15px solid #fff;border-top:9px solid transparent;
+  border-bottom:9px solid transparent;margin-left:4px}
+
+/* ---------- timeline ---------- */
+.tl{display:grid;gap:0}
+.tl-row{display:grid;grid-template-columns:132px 1fr;gap:22px;padding:16px 0;
+  border-bottom:1px solid var(--line)}
+.tl-row:last-child{border-bottom:0}
+.tl-when{font-family:var(--mono);font-size:12.5px;color:var(--ac);padding-top:2px}
+.tl-what b{display:block;font-size:15px;margin-bottom:3px}
+.tl-what span{color:var(--tx3);font-size:13px}
+
+/* ---------- skills ---------- */
+.sk{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:24px}
+.sk h4{color:var(--ac);font-family:var(--mono);font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:13px}
+.sk ul{margin:0;padding:0;list-style:none}
+.sk li{font-size:14px;color:var(--tx2);padding:3.5px 0}
+
+/* ---------- lightbox ---------- */
+#lb{position:fixed;inset:0;z-index:100;background:rgba(6,8,12,.95);
+  display:none;align-items:center;justify-content:center;padding:44px 20px;
+  backdrop-filter:blur(6px)}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:calc(100vh - 148px);width:auto;
+  border-radius:7px;border:1px solid var(--line2)}
+#lb-cap{position:absolute;bottom:22px;left:0;right:0;text-align:center;
+  color:var(--tx2);font-size:13.5px;padding:0 60px;line-height:1.6}
+#lb-x{position:absolute;top:16px;right:20px;background:none;border:0;
+  color:var(--tx2);font-size:30px;cursor:pointer;line-height:1;padding:6px 12px}
+#lb-x:hover{color:var(--tx)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;
+  border:0;color:var(--tx2);font-size:34px;cursor:pointer;padding:16px 20px;line-height:1}
+.lb-nav:hover{color:var(--tx)}
+#lb-prev{left:4px} #lb-next{right:4px}
+
+footer{border-top:1px solid var(--line);padding:34px 0 54px;color:var(--tx3);font-size:12.5px}
+
+@media(max-width:820px){
+  .api{grid-template-columns:1fr}
+  .tl-row{grid-template-columns:1fr;gap:5px}
+  section{padding:56px 0}
+  header.hero{padding:64px 0 52px}
+  .proj{padding:22px}
+}
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+ <defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+          orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fd1c5"/></marker>
+  <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+          orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fd1c5"/></marker>
+  <marker id="a2d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+          orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7a8aa0"/></marker>
+ </defs>
+</svg>
+
+<nav>
+  <div class="nav-in">
+    <a href="#top" class="brand">遊戲程式作品集</a>
+    <a href="#wayi">SDK 與後端</a>
+    <a href="#leyi">遊戲開發</a>
+    <a href="#softstar">Unreal / 端遊</a>
+    <a href="#hexiang">Shader / Cocos</a>
+    <a href="#timeline">經歷</a>
+    <a href="#skills">技術能力</a>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+
+<header class="hero">
+  <div class="eyebrow">2021 — 2026 · Portfolio</div>
+  <h1>遊戲程式：從客戶端到後端<br>與線上維運</h1>
+  <p class="lede">
+    五年間橫跨 Unity、Unreal Engine 與 Cocos Creator 的客戶端開發，
+    以及 .NET 後端 SDK 服務、k8s 上的壓測系統與可觀測性建置。
+    以下依時間順序，由近至遠。
+  </p>
+  <div class="stats">
+    <div class="stat"><b>4</b><span>任職公司</span></div>
+    <div class="stat"><b>3</b><span>遊戲引擎</span></div>
+    <div class="stat"><b>3000</b><span>壓測併發 bots</span></div>
+    <div class="stat"><b>36 萬</b><span>串接產品月活用戶</span></div>
+  </div>
+</header>
+
+<section id="wayi">
+  <div class="sec-head">
+    <div class="sec-num">01 / 華義國際數位娛樂</div>
+    <h2>SDK 客戶端串接、後端服務與線上維運</h2>
+    <div class="sec-meta">2025.12 – 2026.9 · 遊戲程式</div>
+  </div>
+
+  <!-- ===== 壓測系統（主打） ===== -->
+  <div class="proj hero-proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>SDK 壓測系統</h3>
+        <p class="summary" style="margin-bottom:0">
+          為 SDK 後端服務自建的一整套壓測工具鏈：桌面工具設計壓測情境，
+          Grafana 自製 App Plugin 直接當控制台，壓測本體以 Pod 形式在 k8s 上依需求啟動、多場並行。
+        </p>
+      </div>
+      <span class="badge">自建工具鏈</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip hi">最高 3000 bots 併發</span>
+      <span class="chip hi">多場次並行</span>
+      <span class="chip">C# / .NET</span>
+      <span class="chip">Kubernetes</span>
+      <span class="chip">Grafana App Plugin</span>
+      <span class="chip">WinForms</span>
+    </div>
+
+    <div class="cols" style="margin-bottom:6px">
+      <div>
+        <h4>情境設計</h4>
+        <ul class="pts">
+          <li><b>固定流程</b>：依序執行指定端點，模擬完整業務流</li>
+          <li><b>隨機權重</b>：20+ 支端點依機率分佈隨機呼叫</li>
+          <li><b>有狀態模式</b>：沿流程累積 token 與訂單編號，貼近真實串接行為</li>
+          <li>步驟間隔隨機化、請求逾時與失敗重試策略可調</li>
+        </ul>
+      </div>
+      <div>
+        <h4>執行與控制</h4>
+        <ul class="pts">
+          <li><b>待命 Pod</b>：常駐 runner 提供控制 API，管理佇列、TTL 與 SIGTERM 轉發</li>
+          <li><b>參數覆寫</b>：同一份情境可調整 bot 數與迴圈次數重複掛載</li>
+          <li>情境／行為檔／測試資料以 ConfigMap 掛載，不需重建映像</li>
+          <li>執行歷史與即時狀態直接呈現在 Grafana 面板</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="api-svg" style="margin:8px auto 4px;max-width:470px">
+      <svg viewBox="0 0 440 330" role="img" aria-label="壓測系統架構圖">
+        
+        <g fill="#161d29" stroke="#2e3a4d" stroke-width="1">
+          <rect x="140" y="8"   width="200" height="46" rx="6"/>
+          <rect x="140" y="104" width="200" height="46" rx="6"/>
+          <rect x="140" y="200" width="200" height="46" rx="6"/>
+          <rect x="140" y="284" width="200" height="38" rx="6"/>
+          <rect x="8"   y="200" width="112" height="46" rx="6"/>
+        </g>
+        <g fill="#e6ecf5" font-size="12" font-weight="600" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="240" y="30">Grafana App Plugin</text>
+          <text x="240" y="126">控制 API · 常駐 runner</text>
+          <text x="240" y="222">壓測本體 Pod × N</text>
+          <text x="240" y="307">目標 SDK 服務</text>
+        </g>
+        <g fill="#6f7f96" font-size="9.5" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="240" y="45">壓測控制台</text>
+          <text x="240" y="141">佇列 · TTL · 訊號轉發</text>
+          <text x="240" y="237">可同時並行多場</text>
+          <text x="64"  y="219">ConfigMap</text>
+          <text x="64"  y="233">情境 · 行為 · 資料</text>
+        </g>
+        <g stroke="#4fd1c5" stroke-width="1.3" marker-end="url(#ar)" fill="none">
+          <line x1="240" y1="54"  x2="240" y2="100"/>
+          <line x1="240" y1="150" x2="240" y2="196"/>
+          <line x1="240" y1="246" x2="240" y2="280"/>
+          <line x1="120" y1="223" x2="136" y2="223"/>
+        </g>
+        <g fill="#a8b6ca" font-size="9.5"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="250" y="81">plugin proxy · 上游驗證</text>
+          <text x="250" y="177">啟動場次</text>
+          <text x="250" y="267">壓測流量</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="figs g3">
+      <figure><img src="images/img09.png" alt="" loading="lazy"><figcaption>Grafana 自製「Bot 壓測」控制台：情境清單、待命 Pod 壽命與執行中 bot 統計</figcaption></figure>
+      <figure><img src="images/img10.png" alt="" loading="lazy"><figcaption>多場次並行執行、參數覆寫與執行歷史</figcaption></figure>
+      <figure><img src="images/img04.png" alt="" loading="lazy"><figcaption>桌面端壓測工具：情境載入、Bot 群組設定與即時 Log</figcaption></figure>
+      <figure><img src="images/img05.png" alt="" loading="lazy"><figcaption>情境編輯器（固定流程）：依序執行、間隔、逾時與重試策略</figcaption></figure>
+      <figure><img src="images/img06.png" alt="" loading="lazy"><figcaption>情境編輯器（隨機權重）：20+ 支端點依機率分佈呼叫</figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===== Server 端 API ===== -->
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>SDK Server 端 API</h3>
+        <p class="summary" style="margin-bottom:0">
+          以 C# / .NET 新寫的三組後端流程，涵蓋跨情境登入憑證、推播派送與第三方金流派獎。
+        </p>
+      </div>
+      <span class="badge warm">C# / .NET</span>
+    </div>
+
+    <div class="api-grid">
+
+      <div class="api">
+        <div>
+          <h3 style="font-size:17px">OTT 單次票證交換</h3>
+          <p class="one">把既有登入態轉換成一組短效的臨時憑證，供 WebView 等外部情境使用。</p>
+          <div class="chips" style="margin-bottom:0">
+            <span class="chip">一次性票證</span>
+            <span class="chip">Token Rotation</span>
+            <span class="chip">短效期</span>
+          </div>
+          <div class="hook">票證用過即廢；refresh token 旋轉後舊憑證立即失效，僅最新一組有效。</div>
+        </div>
+        <div class="api-svg">
+          <svg viewBox="0 0 460 292" role="img" aria-label="OTT 單次票證交換時序圖">
+            
+            <g fill="#161d29" stroke="#2e3a4d"><rect x="10" y="6" width="120" height="28" rx="5"/>
+              <rect x="280" y="6" width="120" height="28" rx="5"/></g>
+            <g fill="#e6ecf5" font-size="11.5" font-weight="600" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="70" y="24">客戶端</text><text x="340" y="24">SDK API</text></g>
+            <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
+              <line x1="70" y1="34" x2="70" y2="286"/><line x1="340" y1="34" x2="340" y2="286"/></g>
+            <g stroke="#4fd1c5" stroke-width="1.2" marker-end="url(#a2)">
+              <line x1="70" y1="66" x2="336" y2="66"/>
+              <line x1="70" y1="134" x2="336" y2="134"/>
+              <line x1="70" y1="236" x2="336" y2="236"/></g>
+            <g stroke="#7a8aa0" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#a2d)">
+              <line x1="340" y1="98" x2="74" y2="98"/>
+              <line x1="340" y1="166" x2="74" y2="166"/>
+              <line x1="340" y1="268" x2="74" y2="268"/></g>
+            <g fill="#a8b6ca" font-size="9.5" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="205" y="61">① 取得單次票證（帶正式 Token）</text>
+              <text x="205" y="93">ticket + 有效期限</text>
+              <text x="205" y="129">② 以 ticket 交換（免 Bearer）</text>
+              <text x="205" y="161">臨時 accessToken + refreshToken</text>
+              <text x="205" y="231">③ Token Rotation（帶 refreshToken）</text>
+              <text x="205" y="263">新的一組 token</text></g>
+            <g><rect x="120" y="180" width="200" height="24" rx="4" fill="#1a212d" stroke="#3a4658"/>
+              <text x="220" y="196" fill="#f0a54a" font-size="9.5" text-anchor="middle"
+                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">ticket 一次性，重複交換即拒絕</text></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="api">
+        <div>
+          <h3 style="font-size:17px">Firebase 推播</h3>
+          <p class="one">發送與送達分離的非同步推播介面，並自動回收失效的裝置 Token。</p>
+          <div class="chips" style="margin-bottom:0">
+            <span class="chip">HMAC 簽章</span>
+            <span class="chip">背景佇列</span>
+            <span class="chip">失效 Token 回收</span>
+          </div>
+          <div class="hook">限流以 Token 數計算，因此設計失效回收機制，把有限額度留給真正送得到的裝置。</div>
+        </div>
+        <div class="api-svg">
+          <svg viewBox="0 0 520 286" role="img" aria-label="Firebase 推播時序圖">
+            <g fill="#161d29" stroke="#2e3a4d"><rect x="8" y="6" width="104" height="28" rx="5"/>
+              <rect x="205" y="6" width="110" height="28" rx="5"/>
+              <rect x="408" y="6" width="104" height="28" rx="5"/></g>
+            <g fill="#e6ecf5" font-size="11.5" font-weight="600" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="60" y="24">呼叫端</text><text x="260" y="24">推播 API</text><text x="460" y="24">FCM</text></g>
+            <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
+              <line x1="60" y1="34" x2="60" y2="280"/><line x1="260" y1="34" x2="260" y2="280"/>
+              <line x1="460" y1="34" x2="460" y2="280"/></g>
+            <g stroke="#4fd1c5" stroke-width="1.2" marker-end="url(#a2)">
+              <line x1="60" y1="66" x2="256" y2="66"/>
+              <line x1="260" y1="128" x2="456" y2="128"/>
+              <line x1="60" y1="228" x2="256" y2="228"/></g>
+            <g stroke="#7a8aa0" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#a2d)">
+              <line x1="260" y1="96" x2="64" y2="96"/>
+              <line x1="460" y1="158" x2="264" y2="158"/>
+              <line x1="260" y1="260" x2="64" y2="260"/></g>
+            <g fill="#a8b6ca" font-size="9.5" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="158" y="61">① 送出推播（HMAC 簽章 + 時間戳）</text>
+              <text x="158" y="91">200 OK：僅代表已排入佇列</text>
+              <text x="360" y="123">② 背景非同步逐筆送出</text>
+              <text x="360" y="153">回報 Token 已失效</text>
+              <text x="158" y="223">③ 查詢無效 Token（每日排程）</text>
+              <text x="158" y="255">失效清單，供呼叫端清除</text></g>
+            <g><rect x="168" y="176" width="184" height="24" rx="4" fill="#1a212d" stroke="#3a4658"/>
+              <text x="260" y="192" fill="#f0a54a" font-size="9.5" text-anchor="middle"
+                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">失效 Token 寫入回收佇列</text></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="api">
+        <div>
+          <h3 style="font-size:17px">第三方金流支付與派獎</h3>
+          <p class="one">建立外部支付訂單、驗證回調簽章，再依遊戲別派發獎勵，並含失敗補償機制。</p>
+          <div class="chips" style="margin-bottom:0">
+            <span class="chip">Strategy Pattern</span>
+            <span class="chip">回調驗簽</span>
+            <span class="chip">ACK / 重試補償</span>
+          </div>
+          <div class="hook">派獎 Handler 採策略模式，新遊戲只要實作介面並註冊即可接上，不動既有流程。</div>
+        </div>
+        <div class="api-svg">
+          <svg viewBox="0 0 600 320" role="img" aria-label="支付與派獎流程時序圖">
+            <g fill="#161d29" stroke="#2e3a4d"><rect x="8" y="6" width="94" height="28" rx="5"/>
+              <rect x="178" y="6" width="94" height="28" rx="5"/>
+              <rect x="348" y="6" width="94" height="28" rx="5"/>
+              <rect x="505" y="6" width="94" height="28" rx="5"/></g>
+            <g fill="#e6ecf5" font-size="11" font-weight="600" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="55" y="24">商店後端</text><text x="225" y="24">支付 API</text>
+              <text x="395" y="24">金流平台</text><text x="552" y="24">遊戲伺服器</text></g>
+            <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
+              <line x1="55" y1="34" x2="55" y2="314"/><line x1="225" y1="34" x2="225" y2="314"/>
+              <line x1="395" y1="34" x2="395" y2="314"/><line x1="552" y1="34" x2="552" y2="314"/></g>
+            <g stroke="#4fd1c5" stroke-width="1.2" marker-end="url(#a2)">
+              <line x1="55" y1="62" x2="221" y2="62"/>
+              <line x1="225" y1="90" x2="391" y2="90"/>
+              <line x1="395" y1="176" x2="229" y2="176"/>
+              <line x1="225" y1="204" x2="548" y2="204"/>
+              <line x1="552" y1="296" x2="229" y2="296"/></g>
+            <g stroke="#7a8aa0" stroke-width="1.1" stroke-dasharray="4 3" marker-end="url(#a2d)">
+              <line x1="395" y1="118" x2="229" y2="118"/>
+              <line x1="225" y1="146" x2="59" y2="146"/>
+              <line x1="552" y1="232" x2="229" y2="232"/>
+              <line x1="225" y1="260" x2="391" y2="260"/></g>
+            <g fill="#a8b6ca" font-size="9" text-anchor="middle"
+               font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+              <text x="138" y="57">① 建立訂單</text>
+              <text x="308" y="85">向金流建單</text>
+              <text x="308" y="113">付款頁</text>
+              <text x="138" y="141">導向玩家至付款頁</text>
+              <text x="308" y="171">② 支付結果通知</text>
+              <text x="388" y="199">③ 依設定選用對應 Handler，派發獎勵</text>
+              <text x="388" y="227">派獎結果</text>
+              <text x="308" y="255">回 ACK</text>
+              <text x="388" y="291">④ 派獎失敗時主動補償重試</text></g>
+            <g><rect x="300" y="272" width="190" height="1" fill="#232c3a"/></g>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 客戶端串接 ===== -->
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>SDK 客戶端第三方插件串接</h3>
+        <p class="summary" style="margin-bottom:0">
+          在 Unity 客戶端整合數據、推播與當機回報等第三方服務，並排除舊版引擎與原生層之間的相容問題。
+        </p>
+      </div>
+      <span class="badge plain">Unity · Android · iOS</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip">AppsFlyer</span>
+      <span class="chip">Firebase Analytics</span>
+      <span class="chip">Firebase Messaging</span>
+      <span class="chip">Crashlytics</span>
+      <span class="chip">Facebook SDK</span>
+      <span class="chip">WebView</span>
+    </div>
+
+    <div class="figs g3">
+      <figure><img src="images/img01.png" alt="" loading="lazy"><figcaption>AppsFlyer：應用內事件上報與媒體渠道歸因</figcaption></figure>
+      <figure><img src="images/img02.png" alt="" loading="lazy"><figcaption>Firebase Analytics 事件總覽：28 天約 360 萬筆事件、36 萬名使用者</figcaption></figure>
+    </div>
+
+    <div class="figs free" style="grid-template-columns:1fr;margin-top:14px">
+      <figure><img src="images/img03.png" alt="" loading="lazy"><figcaption>Crashlytics 當機議題追蹤：定位到原生互操作層 SafeHandle 的例外</figcaption></figure>
+    </div>
+
+    <h4 style="margin-top:26px">舊版引擎相容性排查</h4>
+    <ul class="pts">
+      <li><b>Android 高 API 等級閃退</b>：舊版 Unity 在 Development Build 打包至較新 API 等級時，
+        因廣播接收器註冊未帶必要旗標，觸發系統嚴格檢查而閃退 —
+        <a href="https://app.notion.com/p/Unity-2020-3-49-DevelopmentBuild-API33-RegisterReceiver-flag-3360167bcb968052965acb13d897f2d1?source=copy_link" target="_blank" rel="noopener">排查筆記</a></li>
+      <li><b>iOS 跳轉商店失效</b>：舊版 Unity 的開啟外部連結 API 在新版 iOS 無法運作，
+        底層呼叫到已棄用的原生方法 —
+        <a href="https://app.notion.com/p/Unity-2020-3-49-Application-OpenUrl-ios-18-API-33e0167bcb9680609318c465cf95f5fb?source=copy_link" target="_blank" rel="noopener">排查筆記</a></li>
+      <li><b>過審升級連鎖問題</b>：第三方插件因商店審查要求升級，需一併調整 JDK 與 Gradle 版本</li>
+    </ul>
+  </div>
+
+  <!-- ===== 可觀測性 ===== -->
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>k8s 日誌收集與 Grafana 面板</h3>
+        <p class="summary" style="margin-bottom:0">
+          評估並串接容器環境的日誌收集鏈路，再以自訂面板讓服務日誌與壓測結果能直接被查詢。
+        </p>
+      </div>
+      <span class="badge plain">Observability</span>
+    </div>
+
+    <div class="cols">
+      <div>
+        <h4>收集端</h4>
+        <ul class="pts"><li>Promtail</li><li>Grafana Alloy</li></ul>
+      </div>
+      <div>
+        <h4>儲存端</h4>
+        <ul class="pts"><li>Loki</li><li>VictoriaLogs</li></ul>
+      </div>
+      <div>
+        <h4>呈現</h4>
+        <ul class="pts"><li>服務日誌自訂面板</li><li>壓測控制自訂面板</li></ul>
+      </div>
+    </div>
+
+    <div class="figs free" style="grid-template-columns:1fr">
+      <figure><img src="images/img07.png" alt="" loading="lazy"><figcaption>服務日誌自訂面板：百萬筆等級日誌的即時篩選與檢索</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="leyi">
+  <div class="sec-head">
+    <div class="sec-num">02 / 樂意傳播</div>
+    <h2>手機遊戲開發與營運</h2>
+    <div class="sec-meta">2024.8 – 2025.10 · 遊戲程式</div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>營運中三消遊戲版本更新</h3>
+        <p class="summary" style="margin-bottom:0">
+          已上線的三消遊戲，負責每月更新內容製作與問題修正。
+        </p>
+      </div>
+      <span class="badge plain">Unity · 已上線</span>
+    </div>
+    <div class="figs" style="grid-template-columns:minmax(0,1fr)">
+      <div class="vid" data-yt="MGA2b7V23x8">
+        <img src="https://i.ytimg.com/vi/MGA2b7V23x8/hqdefault.jpg" alt="遊戲影片" loading="lazy">
+        <div class="play"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>放置類手機遊戲</h3>
+        <p class="summary" style="margin-bottom:0">
+          負責大部分玩法系統與對應介面的實作。
+        </p>
+      </div>
+      <span class="badge plain">Unity · 未上市</span>
+    </div>
+    <div class="chips">
+      <span class="chip">玩家資訊 / 設定</span><span class="chip">好友</span>
+      <span class="chip">公會</span><span class="chip">建設</span>
+      <span class="chip">編隊</span><span class="chip">劇情擴充</span>
+      <span class="chip">音樂音效</span><span class="chip">新手教學</span>
+    </div>
+    <div class="figs" style="grid-template-columns:minmax(0,1fr)">
+      <div class="vid" data-yt="HlQBGV_R4Cg">
+        <img src="https://i.ytimg.com/vi/HlQBGV_R4Cg/hqdefault.jpg" alt="遊戲影片" loading="lazy">
+        <div class="play"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>塔防類手機遊戲</h3>
+        <p class="summary" style="margin-bottom:0">
+          從零建立專案底層架構，並實作塔防主流程。
+        </p>
+      </div>
+      <span class="badge plain">Unity · 未上市</span>
+    </div>
+    <div class="chips">
+      <span class="chip hi">遊戲狀態機</span><span class="chip hi">UI 管理器</span>
+      <span class="chip hi">資源管理器</span><span class="chip hi">物件管理器</span>
+      <span class="chip">塔防流程</span>
+    </div>
+    <div class="figs" style="grid-template-columns:minmax(0,1fr)">
+      <div class="vid r43" data-yt="9Uq9s-9n5r4">
+        <img src="https://i.ytimg.com/vi/9Uq9s-9n5r4/hqdefault.jpg" alt="遊戲影片" loading="lazy">
+        <div class="play"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>互動式廣告</h3>
+        <p class="summary" style="margin-bottom:0">
+          可試玩形式的互動廣告素材製作。
+        </p>
+      </div>
+      <span class="badge plain">Cocos Creator</span>
+    </div>
+    <div class="figs g4 free">
+      <figure style="max-width:230px"><img src="images/img11.gif" alt="" loading="lazy"><figcaption>像素風烘焙玩法試玩廣告</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="softstar">
+  <div class="sec-head">
+    <div class="sec-num">03 / 大宇資訊</div>
+    <h2>Unreal 系統開發與端遊維護</h2>
+    <div class="sec-meta">2022.11 – 2024.7 · 遊戲程式</div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>JRPG 新作系統功能開發</h3>
+        <p class="summary" style="margin-bottom:0">
+          在 Unreal Engine 上負責非戰鬥類的系統功能與對應介面。
+        </p>
+      </div>
+      <span class="badge warm">Unreal Engine</span>
+    </div>
+    <div class="chips">
+      <span class="chip">互動</span><span class="chip">任務</span>
+      <span class="chip">劇情</span><span class="chip">道具</span>
+      <span class="chip">對話</span><span class="chip">NPC 行為</span>
+      <span class="chip">明雷遭遇</span><span class="chip">存檔</span>
+      <span class="chip">各系統 UI</span>
+    </div>
+    <div class="figs" style="grid-template-columns:minmax(0,1fr)">
+      <div class="vid" data-yt="luRASzoNNKA">
+        <img src="https://i.ytimg.com/vi/luRASzoNNKA/hqdefault.jpg" alt="遊戲影片" loading="lazy">
+        <div class="play"><i></i></div>
+      </div>
+    </div>
+    <p style="margin:16px 0 0;font-size:13.5px;color:var(--tx3)">
+      補充文件：<a href="https://docs.google.com/presentation/d/1hsZZWBYZJju1mi2UHZ6fM-ivTesLlwdUJnWl0n-akd0/edit?usp=sharing" target="_blank" rel="noopener">系統簡報</a>
+    </p>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>經典單機作品重新打包</h3>
+        <p class="summary" style="margin-bottom:0">
+          為符合應用商店上架要求，將既有 32 位元版本改建為 64 位元版本。
+        </p>
+      </div>
+      <span class="badge plain">Unity</span>
+    </div>
+    <p style="margin:0;font-size:13.5px;color:var(--tx3)">
+      補充文件：<a href="https://docs.google.com/document/d/1HKf9mMGpTH0CAPQ3ncncZ7JMOu-MeYl6t271eMsWaAY/edit?usp=sharing" target="_blank" rel="noopener">改建紀錄</a>
+    </p>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>線上遊戲更新器改版</h3>
+        <p class="summary" style="margin-bottom:0">
+          既有更新器改寫：公告看板、正式／測試環境切換與更新啟動流程。
+        </p>
+      </div>
+      <span class="badge plain">Unity</span>
+    </div>
+    <div class="figs g2 free">
+      <figure><img src="images/img12.png" alt="" loading="lazy"><figcaption>更新器主畫面：活動與系統公告、環境切換、啟動遊戲</figcaption></figure>
+    </div>
+    <p style="margin:16px 0 0;font-size:13.5px;color:var(--tx3)">
+      補充文件：<a href="https://docs.google.com/document/d/1myQWi5DcikT6M7ftq9vreplVcF2wbFNyA4UeUV0jRVw/edit" target="_blank" rel="noopener">製作紀錄</a>
+    </p>
+  </div>
+</section>
+
+<section id="hexiang">
+  <div class="sec-head">
+    <div class="sec-num">04 / 禾向數位科技</div>
+    <h2>Cocos Creator 遊戲開發與 2D Shader</h2>
+    <div class="sec-meta">2021.3 – 2022.11 · 遊戲開發工程師</div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>機台類遊戲開發</h3>
+        <p class="summary" style="margin-bottom:0">
+          參與多款機台與彩票類遊戲的功能開發與問題修復，主要面向海外市場。
+        </p>
+      </div>
+      <span class="badge plain">Cocos Creator</span>
+    </div>
+    <div class="figs g3">
+      <figure><img src="images/img13.png" alt="" loading="lazy"><figcaption>多線機台遊戲</figcaption></figure>
+      <figure><img src="images/img15.png" alt="" loading="lazy"><figcaption>含倍率軸的機台遊戲</figcaption></figure>
+      <figure><img src="images/img14.png" alt="" loading="lazy"><figcaption>小遊戲與累積獎池</figcaption></figure>
+      <figure><img src="images/img18.png" alt="" loading="lazy"><figcaption>刮刮卡玩法：負責刮除功能</figcaption></figure>
+      <figure><img src="images/img19.gif" alt="" loading="lazy"><figcaption>中獎連線高亮</figcaption></figure>
+      <figure><img src="images/img24.gif" alt="" loading="lazy"><figcaption>轉輪符號點擊回饋</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>2D Shader 開發</h3>
+        <p class="summary" style="margin-bottom:0">
+          為專案撰寫實際上線使用的 Shader，以及一系列自主練習成果。
+        </p>
+      </div>
+      <span class="badge warm">實際上線</span>
+    </div>
+
+    <h4>專案使用</h4>
+    <div class="figs g3">
+      <figure><img src="images/img16.gif" alt="" loading="lazy"><figcaption>刮除 Shader：多種刮除形狀與進度即時計算</figcaption></figure>
+      <figure><img src="images/img17.gif" alt="" loading="lazy"><figcaption>刮除進度回報，達標自動揭露</figcaption></figure>
+      <figure><img src="images/img20.gif" alt="" loading="lazy"><figcaption>連續圖動畫 Shader：單一圖集驅動多色變體</figcaption></figure>
+      <figure><img src="images/img21.png" alt="" loading="lazy"><figcaption>對應的 Sprite Sheet 圖集</figcaption></figure>
+      <figure><img src="images/img22.png" alt="" loading="lazy"><figcaption>Blur：處理前</figcaption></figure>
+      <figure><img src="images/img23.png" alt="" loading="lazy"><figcaption>Blur：處理後</figcaption></figure>
+    </div>
+
+    <h4 style="margin-top:26px">練習作品</h4>
+    <div class="figs g5">
+      <figure><img src="images/img25.gif" alt="" loading="lazy"><figcaption>Outline Glow 外框發光</figcaption></figure>
+      <figure><img src="images/img26.gif" alt="" loading="lazy"><figcaption>撲克牌咪牌：牌面彎折變形</figcaption></figure>
+      <figure><img src="images/img27.gif" alt="" loading="lazy"><figcaption>咪牌的另一種掀牌角度</figcaption></figure>
+      <figure><img src="images/img28.gif" alt="" loading="lazy"><figcaption>海底水波折射擾動</figcaption></figure>
+      <figure><img src="images/img29.gif" alt="" loading="lazy"><figcaption>鏡面掃光光澤</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>圖層合成工具 App</h3>
+        <p class="summary" style="margin-bottom:0">
+          以 Android Studio 開發的圖片分層合成與批次生成工具。
+        </p>
+      </div>
+      <span class="badge plain">Android Studio</span>
+    </div>
+    <div class="figs g4 tall">
+      <figure><img src="images/img30.png" alt="" loading="lazy"><figcaption>作品集列表</figcaption></figure>
+      <figure><img src="images/img31.png" alt="" loading="lazy"><figcaption>分層預覽與合成</figcaption></figure>
+      <figure><img src="images/img32.png" alt="" loading="lazy"><figcaption>素材圖層管理與批次生成</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="sec-head">
+    <div class="sec-num">05 / 經歷</div>
+    <h2>時間軸</h2>
+  </div>
+  <div class="tl">
+    <div class="tl-row"><div class="tl-when">2025.12 – 2026.9</div>
+      <div class="tl-what"><b>華義國際數位娛樂　遊戲程式</b>
+        <span>SDK 客戶端串接、Server 端 API、壓測系統、k8s 日誌與 Grafana 面板</span></div></div>
+    <div class="tl-row"><div class="tl-when">2024.8 – 2025.10</div>
+      <div class="tl-what"><b>樂意傳播　遊戲程式</b>
+        <span>三消遊戲營運更新、放置類與塔防類手遊開發、互動式廣告</span></div></div>
+    <div class="tl-row"><div class="tl-when">2022.11 – 2024.7</div>
+      <div class="tl-what"><b>大宇資訊　遊戲程式</b>
+        <span>Unreal JRPG 系統功能、單機作品 64 位元重新打包、線上遊戲更新器改版</span></div></div>
+    <div class="tl-row"><div class="tl-when">2021.3 – 2022.11</div>
+      <div class="tl-what"><b>禾向數位科技　遊戲開發工程師</b>
+        <span>Cocos Creator 遊戲開發與 Bug 修復、2D Shader 開發、Android App 開發</span></div></div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="sec-head">
+    <div class="sec-num">06 / 技術能力</div>
+    <h2>技術棧</h2>
+  </div>
+  <div class="sk">
+    <div><h4>引擎 / 客戶端</h4><ul>
+      <li>Unity（C#）</li><li>Unreal Engine</li><li>Cocos Creator</li>
+      <li>2D Shader</li><li>UI 系統與架構</li></ul></div>
+    <div><h4>後端</h4><ul>
+      <li>C# / .NET</li><li>REST API 設計</li><li>權杖與簽章驗證</li>
+      <li>第三方金流串接</li><li>非同步佇列處理</li></ul></div>
+    <div><h4>平台 / 維運</h4><ul>
+      <li>Kubernetes</li><li>Grafana（含 App Plugin）</li>
+      <li>Loki / VictoriaLogs</li><li>Promtail / Alloy</li>
+      <li>Android / iOS 打包與過審</li></ul></div>
+    <div><h4>服務串接</h4><ul>
+      <li>Firebase（Analytics / Messaging / Crashlytics）</li>
+      <li>AppsFlyer</li><li>Facebook SDK</li><li>WebView 整合</li></ul></div>
+  </div>
+</section>
+
+
+</div>
+<div id="lb" role="dialog" aria-modal="true">
+  <button id="lb-x" aria-label="關閉">&times;</button>
+  <button class="lb-nav" id="lb-prev" aria-label="上一張">&#8249;</button>
+  <img id="lb-img" alt="">
+  <button class="lb-nav" id="lb-next" aria-label="下一張">&#8250;</button>
+  <div id="lb-cap"></div>
+</div>
+<script>
+(function(){
+  var figs=[],idx=0;
+  var lb=document.getElementById('lb'),im=document.getElementById('lb-img'),
+      cap=document.getElementById('lb-cap');
+  function show(i){
+    if(!figs.length)return;
+    idx=(i+figs.length)%figs.length;
+    var f=figs[idx];
+    im.src=f.querySelector('img').src;
+    var c=f.querySelector('figcaption');
+    cap.textContent=(c?c.textContent:'')+'  ('+(idx+1)+'/'+figs.length+')';
+    lb.classList.add('on');
+  }
+  document.addEventListener('click',function(e){
+    var f=e.target.closest('figure');
+    if(f&&f.querySelector('img')){
+      figs=Array.prototype.slice.call(document.querySelectorAll('figure'));
+      show(figs.indexOf(f));return;
+    }
+    if(e.target.id==='lb-x'||e.target.id==='lb'){lb.classList.remove('on');}
+    if(e.target.id==='lb-prev'){show(idx-1);}
+    if(e.target.id==='lb-next'){show(idx+1);}
+  });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('on'))return;
+    if(e.key==='Escape')lb.classList.remove('on');
+    if(e.key==='ArrowLeft')show(idx-1);
+    if(e.key==='ArrowRight')show(idx+1);
+  });
+  // click-to-load YouTube
+  document.addEventListener('click',function(e){
+    var v=e.target.closest('.vid');
+    if(!v||v.dataset.on)return;
+    v.dataset.on='1';
+    v.innerHTML='<iframe src="https://www.youtube.com/embed/'+v.dataset.yt+
+      '?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture" '+
+      'allowfullscreen title="專案影片"></iframe>';
+  });
+})();
+</script>
+<footer><div class="wrap">作品集內容依原任職專案整理；截圖已移除內部識別資訊。</div></footer>
+</body>
+</html>

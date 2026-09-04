@@ -1,0 +1,6 @@
+# 未去識別化的原始截圖，不上傳
+images_original/
+# 內含內部代號等註記，僅供本機參考
+captions.json
+images_manifest.json
+.DS_Store
