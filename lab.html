@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>個人研究｜遊戲程式作品集</title>
+<meta name="description" content="個人研究：Go 伺服器與 Unity 客戶端的 MMO 前後端練習，以及依熟悉程度調整嚴謹度的 AI 協作開發流程。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+ <defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6"
+          orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4fd1c5"/></marker>
+ </defs>
+</svg>
+
+<nav>
+  <div class="nav-in">
+    <a href="index.html" class="brand">遊戲程式作品集</a>
+    <span class="tabs"><a href="index.html">工作經歷</a><a href="lab.html" class="on">個人研究</a></span>
+    <span class="spacer"></span>
+    <a href="#mmo">MMO 前後端</a>
+    <a href="#workflow">AI 協作流程</a>
+  </div>
+</nav>
+
+<div class="wrap" id="top">
+
+<header class="hero">
+  <div class="eyebrow">2026 · Personal Research</div>
+  <h1>個人研究：MMO 前後端<br>與 AI 協作開發</h1>
+  <p class="lede">
+    一個 MMO 的前後端練習：Go 伺服器與 Unity 客戶端分成兩個 repo，以對外協定文件銜接。
+    兩邊都和 AI 協作，但依自己對領域的熟悉程度，用不同嚴謹度的流程——
+    不熟的後端拆成七個階段、每一步都留下可審查的文件；熟悉的客戶端則在 plan mode 反覆確認架構後才實作。
+    我負責設計流程、拍板範圍與取捨，並審查產出。
+  </p>
+</header>
+
+<section id="mmo">
+  <div class="sec-head">
+    <div class="sec-num">01 / 個人研究</div>
+    <h2>MMO：Go 伺服器與 Unity 客戶端</h2>
+    <div class="sec-meta">2026.9 · 個人練習專案 · 兩個 repo · 原始碼未公開</div>
+  </div>
+
+  <div class="proj hero-proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>伺服器：權威架構的遊戲後端</h3>
+        <p class="summary" style="margin-bottom:0">
+          以 Go 撰寫，玩家透過單一條 WebSocket 連線登入、進入城鎮並即時戰鬥；
+          server 以固定 tick 推進世界並廣播給所有連線。兩週內以 22 個 vertical slice 逐刀累積，
+          每一刀都通過 <code>go test -race</code> 才收尾。
+        </p>
+      </div>
+      <span class="badge">Go</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip hi">Server 權威</span>
+      <span class="chip hi">單一 tick 扇出</span>
+      <span class="chip">Go</span>
+      <span class="chip">WebSocket</span>
+      <span class="chip">PostgreSQL / pgx</span>
+      <span class="chip">testcontainers</span>
+      <span class="chip">race detector</span>
+    </div>
+
+    <div class="cols">
+      <div>
+        <h4>已完成的功能</h4>
+        <ul class="pts">
+          <li><b>帳號與連線</b>：登入、角色命名（名字唯一性由資料庫約束保證）、每帳號速率限制</li>
+          <li><b>城鎮</b>：點擊移動與朝向同步、公開喊話</li>
+          <li><b>戰鬥</b>：ATK／DEF 傷害公式；單體、範圍、連鎖閃電、自我治療四種技能；死亡、復活免疫與自然回復</li>
+          <li><b>怪物</b>：屬性與技能由資料表決定；遊走、仇恨追擊與脫戰；生成器依種類配額與重生時間補怪</li>
+        </ul>
+      </div>
+      <div>
+        <h4>架構重點</h4>
+        <ul class="pts">
+          <li><b>永不信任 client</b>：傷害、冷卻、座標一律在 server 重算，解碼型別只宣告會採信的欄位</li>
+          <li><b>單一寫入者</b>：世界狀態由單一 RWMutex 保護，每個可變欄位明定誰能寫，並以靜態 AST 測試守住</li>
+          <li><b>出口有界</b>：每條連線一條有界佇列，扇出只由 tick goroutine 非阻塞投遞，塞滿就關連線讓它重連</li>
+          <li><b>測試</b>：約 1.2 萬行 production、4.8 萬行測試（684 支），含併發、對抗與負載測試</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="figs free" style="grid-template-columns:1fr">
+      <figure><img src="images/lab/architecture.png" alt="MMO Server 架構總覽圖" loading="lazy"><figcaption>架構總覽：每條連線兩個 goroutine、全世界一個 tick goroutine，資料從哪裡進、寫到哪裡、從哪裡出去</figcaption></figure>
+    </div>
+    <div class="figs g2 free">
+      <figure><img src="images/lab/sequence-login-to-tick.png" alt="登入到 tick 廣播時序圖" loading="lazy"><figcaption>時序：登入、選角、進場，到輸入被 tick 扇出</figcaption></figure>
+      <figure><img src="images/lab/dataflow-useskill.png" alt="技能施放資料流圖" loading="lazy"><figcaption>資料流：一次技能施放在哪裡驗證、結算，怎麼變成每個人的 WorldBatch</figcaption></figure>
+    </div>
+    <div class="figs g3 free">
+      <figure><img src="images/lab/lifecycle-connection.png" alt="連線階段生命週期圖" loading="lazy"><figcaption>連線階段：每個階段只收哪些訊息、哪些錯誤會關連線</figcaption></figure>
+      <figure><img src="images/lab/lifecycle-player.png" alt="玩家死亡與復活生命週期圖" loading="lazy"><figcaption>玩家死亡、等待復活與復活免疫</figcaption></figure>
+      <figure><img src="images/lab/lifecycle-monster.png" alt="怪物生成與重生生命週期圖" loading="lazy"><figcaption>怪物由生成器補生、被擊殺後重新排隊</figcaption></figure>
+    </div>
+    <p class="note"><b>圖怎麼來的</b>：由 AI 逐項對照程式碼產生 archify 圖檔，節點釘到產圖當時的原始碼行號；
+      只在架構有結構性變動的那一刀才更新，避免圖與程式脫節。</p>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>客戶端：Unity 串接與輸入輔助</h3>
+        <p class="summary" style="margin-bottom:0">
+          Unity 6（URP 2D），自建網路層與 UI 框架，依伺服器的對外協定逐刀串接到連鎖技能；
+          同時支援桌面滑鼠與手機觸控兩種操作。
+        </p>
+      </div>
+      <span class="badge warm">Unity · C#</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip hi">MVVM</span>
+      <span class="chip hi">依 snapshot_seq 對帳</span>
+      <span class="chip">Unity 6</span>
+      <span class="chip">VContainer</span>
+      <span class="chip">R3</span>
+      <span class="chip">UniTask</span>
+      <span class="chip">WebSocket</span>
+    </div>
+
+    <div class="cols">
+      <div>
+        <h4>架構</h4>
+        <ul class="pts">
+          <li><b>網路層</b>：WebSocket 傳輸、訊息編解碼、接收迴圈切回主執行緒並依型別分派</li>
+          <li><b>世界狀態</b>：以 snapshot_seq 重組快照與事件，死亡後的第二則 EnterOk 可重入套用</li>
+          <li><b>UI 框架</b>：分層 Canvas、DI 組裝、R3 綁定的 MVVM 基底</li>
+          <li><b>系統 UI</b>：Loading、訊息堆疊與提示窗；除錯面板不編進正式 build</li>
+        </ul>
+      </div>
+      <div>
+        <h4>已完成的功能</h4>
+        <ul class="pts">
+          <li><b>基本流程</b>：選角、點擊移動與位置插值、朝向、聊天，斷線與重複登入轉成系統訊息</li>
+          <li><b>戰鬥演出</b>：怪物血條、技能施放、傷害數字、連鎖閃電跳躍線、死亡遮罩與復活</li>
+          <li><b>輸入輔助</b>：自動鎖定、射程外先走過去再施放、虛擬搖桿、自動戰鬥，全部在 client 完成，伺服器不用改</li>
+          <li><b>測試</b>：約 1.9 萬行程式、433 支 EditMode 測試</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="workflow">
+  <div class="sec-head">
+    <div class="sec-num">02 / 個人研究</div>
+    <h2>AI 協作開發流程</h2>
+    <div class="sec-meta">Claude Code · 依熟悉程度調整流程</div>
+  </div>
+
+  <div class="proj hero-proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>依熟悉程度決定流程多嚴謹</h3>
+        <p class="summary" style="margin-bottom:0">
+          同一個專案的兩端，刻意用了兩種和 AI 協作的方式。判斷依據是：我能不能自己一眼看出 AI 的產出哪裡不對。
+        </p>
+      </div>
+      <span class="badge warm">流程選擇</span>
+    </div>
+    <div class="cols">
+      <div>
+        <h4>伺服器（Go）：不熟 → 嚴謹流程</h4>
+        <ul class="pts">
+          <li>後端不是我的主場，錯誤不容易當場看出來</li>
+          <li>拆成七個階段、交給 6 個專責 subagent，每一步產出一份可審查的文件</li>
+          <li>用固定的驗收門檻與逐項對照補上「看不出來」的部分</li>
+        </ul>
+      </div>
+      <div>
+        <h4>客戶端（Unity）：熟悉 → plan mode</h4>
+        <ul class="pts">
+          <li>Unity 是我的本行，架構好不好可以直接判斷</li>
+          <li>每個功能先在 plan mode 反覆修改實作架構，確認後才讓 AI 動手</li>
+          <li>省下多階段的文件與 token 成本，把審查集中在架構決策</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj hero-proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>伺服器：一刀一條分支、每階段一個檔案</h3>
+        <p class="summary" style="margin-bottom:0">
+          每個功能切成一個可以獨立驗收的 vertical slice，依序交給專責的 agent。
+          agent 每次啟動都是全新的 context，看不到對話歷史，所以階段之間只靠寫進磁碟的文件交接。
+        </p>
+      </div>
+      <span class="badge warm">流程設計</span>
+    </div>
+
+    <div class="flow">
+      <svg viewBox="0 0 760 196" role="img" aria-label="七階段開發流程圖">
+        <g fill="#161d29" stroke="#2e3a4d" stroke-width="1">
+          <rect x="8"   y="46" width="94" height="62" rx="6" stroke="#f0a54a"/>
+          <rect x="115" y="46" width="94" height="62" rx="6"/>
+          <rect x="222" y="46" width="94" height="62" rx="6" stroke-dasharray="4 3"/>
+          <rect x="329" y="46" width="94" height="62" rx="6" stroke-dasharray="4 3"/>
+          <rect x="436" y="46" width="94" height="62" rx="6"/>
+          <rect x="543" y="46" width="94" height="62" rx="6"/>
+          <rect x="650" y="46" width="102" height="62" rx="6" stroke="#4fd1c5"/>
+        </g>
+        <g fill="#e6ecf5" font-size="12" font-weight="600" text-anchor="middle"
+           font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">
+          <text x="55"  y="72">/scope</text>
+          <text x="162" y="72">spec</text>
+          <text x="269" y="72">architect</text>
+          <text x="376" y="72">pitfall</text>
+          <text x="483" y="72">implement</text>
+          <text x="590" y="72">test</text>
+          <text x="701" y="72">acceptance</text>
+        </g>
+        <g fill="#a8b6ca" font-size="10" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="55"  y="92">範圍，我拍板</text>
+          <text x="162" y="92">規格與數值範例</text>
+          <text x="269" y="92">方案與取捨</text>
+          <text x="376" y="92">找競態與攻擊面</text>
+          <text x="483" y="92">照規格實作</text>
+          <text x="590" y="92">測試＋變異驗證</text>
+          <text x="701" y="92">gate 與逐項對照</text>
+        </g>
+        <g stroke="#4fd1c5" stroke-width="1.3" marker-end="url(#ar)" fill="none">
+          <line x1="102" y1="77" x2="112" y2="77"/>
+          <line x1="209" y1="77" x2="219" y2="77"/>
+          <line x1="316" y1="77" x2="326" y2="77"/>
+          <line x1="423" y1="77" x2="433" y2="77"/>
+          <line x1="530" y1="77" x2="540" y2="77"/>
+          <line x1="637" y1="77" x2="647" y2="77"/>
+        </g>
+        <g fill="#6f7f96" font-size="10" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="55"  y="28">人</text>
+          <text x="322" y="26">新的共享狀態、併發或信任邊界才觸發</text>
+          <text x="701" y="28">build · vet · test -race</text>
+        </g>
+        <path d="M222,40 L222,36 L423,36 L423,40" stroke="#6f7f96" fill="none" stroke-width="1"/>
+        <g fill="#a8b6ca" font-size="10.5" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="380" y="140">scope.md → spec.md → architecture.md → risks.md → 程式 → 測試 → acceptance.md</text>
+          <text x="380" y="164">每個階段結束就 commit，下一個階段只讀檔案接手；收尾以 merge --no-ff 併回，保留整刀的階段順序</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="cols">
+      <div>
+        <h4>讓產出可驗證</h4>
+        <ul class="pts">
+          <li><b>固定驗收門檻</b>：build、vet、<code>go test -race</code> 三道全過才算完成，不接受「本機跑不出來」</li>
+          <li><b>變異驗證</b>：test-writer 刻意把實作改壞、確認測試會變紅，再用檔案備份還原</li>
+          <li><b>逐項對照</b>：acceptance 比對規格、架構與風險清單，偏離要逐條列出，沒有偏離也要明講</li>
+        </ul>
+      </div>
+      <div>
+        <h4>讓決策可追溯</h4>
+        <ul class="pts">
+          <li><b>裁決要有依據</b>：architect 必須指出是哪一條非功能需求逼出這個方案，或明講「沒有需求能區分」</li>
+          <li><b>延後要有觸發條件</b>：不做的項目寫進 BACKLOG，附可觀測的重新評估條件，不接受「以後再看」</li>
+          <li><b>commit 標階段</b>：<code>[spec]</code>、<code>[implement]</code> 等前綴，一眼看出每個 commit 是哪一刀的哪一步</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>客戶端與跨 repo 協作：文件就是交接</h3>
+        <p class="summary" style="margin-bottom:0">
+          兩個 repo 各自由不同的 AI session 開發，彼此看不到對方的對話，所以銜接完全靠文件。
+        </p>
+      </div>
+      <span class="badge plain">文件契約</span>
+    </div>
+    <div class="cols">
+      <div>
+        <h4>協定是唯一事實來源</h4>
+        <ul class="pts">
+          <li>伺服器維護對外協定 <code>protocol.md</code>：訊息型別、欄位、close code 與 client 必須實作的規則</li>
+          <li>伺服器更新協定後，客戶端先把協定文件同步進自己的 repo，再依變更串接；兩邊衝突一律以協定為準</li>
+          <li>客戶端串接的 commit 標上對應的伺服器 feature 名稱，前後端進度可以直接對照</li>
+        </ul>
+      </div>
+      <div>
+        <h4>客戶端的施工文件</h4>
+        <ul class="pts">
+          <li>目標是讓一個沒有前置脈絡的新 session，照著文件就能接手開發</li>
+          <li>記錄現況、實作規則與已知問題，只寫 client 怎麼做，不複製協定內容</li>
+          <li><b>先寫需求與分工決策再動手</b>：例如自動戰鬥、搖桿等輸入輔助，先評估結論是「全部由 client 處理、伺服器不用改」，採用後就地更新施工文件</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>伺服器：規則從踩到的問題長出來</h3>
+        <p class="summary" style="margin-bottom:0">
+          伺服器的流程規範寫在 CLAUDE.md 與各 agent 定義裡，不是一次寫好的。每條規則都對應一次實際發生的問題，
+          並把「為什麼」一起留下，避免之後被看似等價的寫法繞過。
+        </p>
+      </div>
+      <span class="badge plain">持續修正</span>
+    </div>
+    <div class="cases">
+      <div class="case">
+        <h4>未提交的實作被洗掉</h4>
+        <p>test-writer 做變異驗證時用 git 還原檔案，把 implementer 尚未 commit 的整份實作洗回上一版。</p>
+        <div class="fix">每個階段結束就 commit；暫時改動工作區一律用檔案備份，判準是「會不會覆寫工作區」而不是列舉指令名。</div>
+      </div>
+      <div class="case">
+        <h4>AI 反覆替遊戲平衡設限</h4>
+        <p>agent 多次把「怪物比玩家快」「區域擺太近」當成缺陷來擋、來提問，但數值應該由企劃調整。</p>
+        <div class="fix">寫成「機制與資料的分界」：程式只擋會讓程式壞掉的值，玩法關係不擋、不提問，並逐一清掉既有的平衡類檢查。</div>
+      </div>
+      <div class="case">
+        <h4>文件產出了卻沒人讀</h4>
+        <p>architect 連續兩輪把測試規格寫進架構文件，但 test-writer 的必讀清單裡沒有那份檔案。</p>
+        <div class="fix">交接表的「誰必須讀它」必須與每個 agent 的必讀清單一致，改一邊就同步改另一邊。</div>
+      </div>
+      <div class="case">
+        <h4>測試鎖死企劃數值</h4>
+        <p>測試直接比對預設設定裡的技能與怪物數值，企劃每調一次數字，就有一批無關的測試變紅。</p>
+        <div class="fix">測試改用凍結的數值 fixture 自己持有輸入；「規格數字有沒有寫進設定」改由驗收對照，不寫成測試。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>伺服器：成本治理，先量測再調整</h3>
+        <p class="summary" style="margin-bottom:0">
+          嚴謹流程的代價是成本：隨著功能累積，每一刀的 token 消耗明顯上升。先寫腳本從 session 紀錄統計各階段用量，找出消耗集中在哪裡，再決定怎麼改。
+        </p>
+      </div>
+      <span class="badge plain">量測驅動</span>
+    </div>
+    <div class="cols">
+      <div>
+        <h4>找出問題</h4>
+        <ul class="pts">
+          <li>實作階段佔大宗：單一階段約 600 個 turn，context 接近上限，每一輪都重送</li>
+          <li>常駐文件與規範檔越長越大，每個 agent 每個 turn 都得帶著</li>
+          <li>切片過大：一刀動到上百個檔案，大量時間花在遷移既有測試</li>
+        </ul>
+      </div>
+      <div>
+        <h4>對應調整</h4>
+        <ul class="pts">
+          <li><b>切片門檻</b>：預估改動過大時，拆刀必須是選項之一</li>
+          <li><b>驗證迴圈要窄</b>：迭代只跑相關測試，完整 <code>-race</code> 留到階段收尾</li>
+          <li><b>規範瘦身</b>：例外表、沿革等細節搬到專門文件，常駐規範只留摘要與指向</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note"><b>導入工具前先做 A/B</b>：評估程式碼結構索引工具 CodeGraph 時，以 3 個真實問題、每組各跑 2 次比較，
+      input token −38%、費用 −24%、耗時 −42%，答案品質相當。第一次量測工具完全沒被呼叫，查出是設定與使用指引缺漏，
+      補齊後重測才採用，並事先寫好退場條件。</div>
+  </div>
+</section>
+
+</div>
+<div id="lb" role="dialog" aria-modal="true">
+  <button id="lb-x" aria-label="關閉">&times;</button>
+  <button class="lb-nav" id="lb-prev" aria-label="上一張">&#8249;</button>
+  <img id="lb-img" alt="">
+  <button class="lb-nav" id="lb-next" aria-label="下一張">&#8250;</button>
+  <div id="lb-cap"></div>
+</div>
+<script src="site.js"></script>
+<footer><div class="wrap">個人研究專案，原始碼未公開；架構圖由伺服器 repo 內的文件產生。</div></footer>
+</body>
+</html>
