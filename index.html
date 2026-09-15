@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>遊戲程式作品集</title>
-<meta name="description" content="Unity / Unreal / Cocos Creator 客戶端開發，.NET 後端 SDK 與服務，k8s 可觀測性。2021–2026 作品集。">
+<meta name="description" content="Unity / Unreal / Cocos Creator 客戶端開發，ASP.NET Core 後端 SDK 與服務，k8s 可觀測性。2021–2026 作品集。">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -41,7 +41,7 @@
   <h1>遊戲程式：從客戶端到後端<br>與線上維運</h1>
   <p class="lede">
     五年間橫跨 Unity、Unreal Engine 與 Cocos Creator 的客戶端開發，
-    以及 .NET 後端 SDK 服務、k8s 上的壓測系統與可觀測性建置。
+    以及 ASP.NET Core 後端 SDK 服務、k8s 上的壓測系統與可觀測性建置。
     以下依時間順序，由近至遠。
   </p>
 </header>
@@ -53,107 +53,16 @@
     <div class="sec-meta">2025.12 – 2026.9 · 遊戲程式</div>
   </div>
 
-  <!-- ===== 壓測系統（主打） ===== -->
-  <div class="proj hero-proj">
-    <div class="proj-top">
-      <div style="flex:1;min-width:260px">
-        <h3>SDK 壓測系統</h3>
-        <p class="summary" style="margin-bottom:0">
-          為 SDK 後端服務自建的一整套壓測工具鏈：桌面工具設計壓測情境，
-          Grafana 自製 App Plugin 直接當控制台，壓測本體以 Pod 形式在 k8s 上依需求啟動、多場並行。
-        </p>
-      </div>
-      <span class="badge">自建工具鏈</span>
-    </div>
-
-    <div class="chips">
-      <span class="chip hi">多場次並行</span>
-      <span class="chip">C# / .NET</span>
-      <span class="chip">Kubernetes</span>
-      <span class="chip">Grafana App Plugin</span>
-      <span class="chip">WinForms</span>
-    </div>
-
-    <div class="cols" style="margin-bottom:6px">
-      <div>
-        <h4>情境設計</h4>
-        <ul class="pts">
-          <li><b>固定流程</b>：依序執行指定端點，模擬完整業務流</li>
-          <li><b>隨機權重</b>：20+ 支端點依機率分佈隨機呼叫</li>
-          <li><b>有狀態模式</b>：沿流程累積 token 與訂單編號，貼近真實串接行為</li>
-          <li>步驟間隔隨機化、請求逾時與失敗重試策略可調</li>
-        </ul>
-      </div>
-      <div>
-        <h4>執行與控制</h4>
-        <ul class="pts">
-          <li><b>待命 Pod</b>：常駐 runner 提供控制 API，管理佇列、TTL 與 SIGTERM 轉發</li>
-          <li><b>參數覆寫</b>：同一份情境可調整 bot 數與迴圈次數重複掛載</li>
-          <li>情境／行為檔／測試資料以 ConfigMap 掛載，不需重建映像</li>
-          <li>執行歷史與即時狀態直接呈現在 Grafana 面板</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="api-svg" style="margin:8px auto 4px;max-width:470px">
-      <svg viewBox="0 0 440 330" role="img" aria-label="壓測系統架構圖">
-        
-        <g fill="#161d29" stroke="#2e3a4d" stroke-width="1">
-          <rect x="140" y="8"   width="200" height="46" rx="6"/>
-          <rect x="140" y="104" width="200" height="46" rx="6"/>
-          <rect x="140" y="200" width="200" height="46" rx="6"/>
-          <rect x="140" y="284" width="200" height="38" rx="6"/>
-          <rect x="8"   y="200" width="112" height="46" rx="6"/>
-        </g>
-        <g fill="#e6ecf5" font-size="12" font-weight="600" text-anchor="middle"
-           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-          <text x="240" y="30">Grafana App Plugin</text>
-          <text x="240" y="126">控制 API · 常駐 runner</text>
-          <text x="240" y="222">壓測本體 Pod × N</text>
-          <text x="240" y="307">目標 SDK 服務</text>
-        </g>
-        <g fill="#6f7f96" font-size="9.5" text-anchor="middle"
-           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-          <text x="240" y="45">壓測控制台</text>
-          <text x="240" y="141">佇列 · TTL · 訊號轉發</text>
-          <text x="240" y="237">可同時並行多場</text>
-          <text x="64"  y="219">ConfigMap</text>
-          <text x="64"  y="233">情境 · 行為 · 資料</text>
-        </g>
-        <g stroke="#4fd1c5" stroke-width="1.3" marker-end="url(#ar)" fill="none">
-          <line x1="240" y1="54"  x2="240" y2="100"/>
-          <line x1="240" y1="150" x2="240" y2="196"/>
-          <line x1="240" y1="246" x2="240" y2="280"/>
-          <line x1="120" y1="223" x2="136" y2="223"/>
-        </g>
-        <g fill="#a8b6ca" font-size="9.5"
-           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-          <text x="250" y="81">plugin proxy · 上游驗證</text>
-          <text x="250" y="177">啟動場次</text>
-          <text x="250" y="267">壓測流量</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="figs g3">
-      <figure><img src="images/img09.png" alt="" loading="lazy"><figcaption>Grafana 自製「Bot 壓測」控制台：情境清單、待命 Pod 壽命與執行中 bot 統計</figcaption></figure>
-      <figure><img src="images/img10.png" alt="" loading="lazy"><figcaption>多場次並行執行、參數覆寫與執行歷史</figcaption></figure>
-      <figure><img src="images/img04.png" alt="" loading="lazy"><figcaption>桌面端壓測工具：情境載入、Bot 群組設定與即時 Log</figcaption></figure>
-      <figure><img src="images/img05.png" alt="" loading="lazy"><figcaption>情境編輯器（固定流程）：依序執行、間隔、逾時與重試策略</figcaption></figure>
-      <figure><img src="images/img06.png" alt="" loading="lazy"><figcaption>情境編輯器（隨機權重）：20+ 支端點依機率分佈呼叫</figcaption></figure>
-    </div>
-  </div>
-
   <!-- ===== Server 端 API ===== -->
   <div class="proj">
     <div class="proj-top">
       <div style="flex:1;min-width:260px">
         <h3>SDK Server 端 API</h3>
         <p class="summary" style="margin-bottom:0">
-          以 C# / .NET 新寫的三組後端流程，涵蓋跨情境登入憑證、推播派送與第三方金流派獎。
+          以 C# / ASP.NET Core 新寫的三組後端流程，涵蓋跨情境登入憑證、推播派送與第三方金流派獎。
         </p>
       </div>
-      <span class="badge warm">C# / .NET</span>
+      <span class="badge warm">C# / ASP.NET Core</span>
     </div>
 
     <div class="api-grid">
@@ -341,6 +250,97 @@
         <a href="https://app.notion.com/p/Unity-2020-3-49-Application-OpenUrl-ios-18-API-33e0167bcb9680609318c465cf95f5fb?source=copy_link" target="_blank" rel="noopener">排查筆記</a></li>
       <li><b>過審升級連鎖問題</b>：第三方插件因商店審查要求升級，需一併調整 JDK 與 Gradle 版本</li>
     </ul>
+  </div>
+
+  <!-- ===== 壓測系統（主打） ===== -->
+  <div class="proj hero-proj">
+    <div class="proj-top">
+      <div style="flex:1;min-width:260px">
+        <h3>SDK 壓測系統</h3>
+        <p class="summary" style="margin-bottom:0">
+          為 SDK 後端服務自建的一整套壓測工具鏈：桌面工具設計壓測情境，
+          Grafana 自製 App Plugin 直接當控制台，壓測本體以 Pod 形式在 k8s 上依需求啟動、多場並行。
+        </p>
+      </div>
+      <span class="badge">自建工具鏈</span>
+    </div>
+
+    <div class="chips">
+      <span class="chip hi">多場次並行</span>
+      <span class="chip">C# / .NET</span>
+      <span class="chip">Kubernetes</span>
+      <span class="chip">Grafana App Plugin</span>
+      <span class="chip">WinForms</span>
+    </div>
+
+    <div class="cols" style="margin-bottom:6px">
+      <div>
+        <h4>情境設計</h4>
+        <ul class="pts">
+          <li><b>固定流程</b>：依序執行指定端點，模擬完整業務流</li>
+          <li><b>隨機權重</b>：20+ 支端點依機率分佈隨機呼叫</li>
+          <li><b>有狀態模式</b>：沿流程累積 token 與訂單編號，貼近真實串接行為</li>
+          <li>步驟間隔隨機化、請求逾時與失敗重試策略可調</li>
+        </ul>
+      </div>
+      <div>
+        <h4>執行與控制</h4>
+        <ul class="pts">
+          <li><b>待命 Pod</b>：常駐 runner 提供控制 API，管理佇列、TTL 與 SIGTERM 轉發</li>
+          <li><b>參數覆寫</b>：同一份情境可調整 bot 數與迴圈次數重複掛載</li>
+          <li>情境／行為檔／測試資料以 ConfigMap 掛載，不需重建映像</li>
+          <li>執行歷史與即時狀態直接呈現在 Grafana 面板</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="api-svg" style="margin:8px auto 4px;max-width:470px">
+      <svg viewBox="0 0 440 330" role="img" aria-label="壓測系統架構圖">
+        
+        <g fill="#161d29" stroke="#2e3a4d" stroke-width="1">
+          <rect x="140" y="8"   width="200" height="46" rx="6"/>
+          <rect x="140" y="104" width="200" height="46" rx="6"/>
+          <rect x="140" y="200" width="200" height="46" rx="6"/>
+          <rect x="140" y="284" width="200" height="38" rx="6"/>
+          <rect x="8"   y="200" width="112" height="46" rx="6"/>
+        </g>
+        <g fill="#e6ecf5" font-size="12" font-weight="600" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="240" y="30">Grafana App Plugin</text>
+          <text x="240" y="126">控制 API · 常駐 runner</text>
+          <text x="240" y="222">壓測本體 Pod × N</text>
+          <text x="240" y="307">目標 SDK 服務</text>
+        </g>
+        <g fill="#6f7f96" font-size="9.5" text-anchor="middle"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="240" y="45">壓測控制台</text>
+          <text x="240" y="141">佇列 · TTL · 訊號轉發</text>
+          <text x="240" y="237">可同時並行多場</text>
+          <text x="64"  y="219">ConfigMap</text>
+          <text x="64"  y="233">情境 · 行為 · 資料</text>
+        </g>
+        <g stroke="#4fd1c5" stroke-width="1.3" marker-end="url(#ar)" fill="none">
+          <line x1="240" y1="54"  x2="240" y2="100"/>
+          <line x1="240" y1="150" x2="240" y2="196"/>
+          <line x1="240" y1="246" x2="240" y2="280"/>
+          <line x1="120" y1="223" x2="136" y2="223"/>
+        </g>
+        <g fill="#a8b6ca" font-size="9.5"
+           font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
+          <text x="250" y="81">plugin proxy · 上游驗證</text>
+          <text x="250" y="177">啟動場次</text>
+          <text x="250" y="267">壓測流量</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="figs g3">
+      <figure><img src="images/img09.png" alt="" loading="lazy"><figcaption>Grafana 自製「Bot 壓測」控制台：情境清單、待命 Pod 壽命與執行中 bot 統計</figcaption></figure>
+      <figure><img src="images/img10.png" alt="" loading="lazy"><figcaption>多場次並行執行、參數覆寫與執行歷史</figcaption></figure>
+      <figure><img src="images/img04.png" alt="" loading="lazy"><figcaption>桌面端壓測工具：情境載入、Bot 群組設定與即時 Log</figcaption></figure>
+      <figure><img src="images/img05.png" alt="" loading="lazy"><figcaption>情境編輯器（固定流程）：依序執行、間隔、逾時與重試策略</figcaption></figure>
+      <figure><img src="images/img06.png" alt="" loading="lazy"><figcaption>情境編輯器（隨機權重）：20+ 支端點依機率分佈呼叫</figcaption></figure>
+    </div>
   </div>
 
   <!-- ===== 可觀測性 ===== -->
@@ -617,7 +617,7 @@
   <div class="tl">
     <div class="tl-row"><div class="tl-when">2025.12 – 2026.9</div>
       <div class="tl-what"><b>華義國際數位娛樂　遊戲程式</b>
-        <span>SDK 客戶端串接、Server 端 API、壓測系統、k8s 日誌與 Grafana 面板</span></div></div>
+        <span>Server 端 API、SDK 客戶端串接、壓測系統、k8s 日誌與 Grafana 面板</span></div></div>
     <div class="tl-row"><div class="tl-when">2024.8 – 2025.10</div>
       <div class="tl-what"><b>樂意傳播　遊戲程式</b>
         <span>三消遊戲營運更新、放置類與塔防類手遊開發、互動式廣告</span></div></div>
@@ -640,7 +640,7 @@
       <li>Unity（C#）</li><li>Unreal Engine</li><li>Cocos Creator</li>
       <li>2D Shader</li><li>UI 系統與架構</li></ul></div>
     <div><h4>後端</h4><ul>
-      <li>C# / .NET</li><li>REST API 設計</li><li>權杖與簽章驗證</li>
+      <li>C# / ASP.NET Core</li><li>REST API 設計</li><li>權杖與簽章驗證</li>
       <li>第三方金流串接</li><li>非同步佇列處理</li></ul></div>
     <div><h4>平台 / 維運</h4><ul>
       <li>Kubernetes</li><li>Grafana（含 App Plugin）</li>
