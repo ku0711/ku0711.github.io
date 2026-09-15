@@ -74,9 +74,10 @@
           <div class="chips" style="margin-bottom:0">
             <span class="chip">一次性票證</span>
             <span class="chip">Token Rotation</span>
-            <span class="chip">短效期</span>
+            <span class="chip">Redis 原子操作</span>
           </div>
-          <div class="hook">票證用過即廢；refresh token 旋轉後舊憑證立即失效，僅最新一組有效。</div>
+          <div class="hook">票證以 Redis 原子「取值並刪除」核銷，同一張票證被同時送來交換，也只有一次會成功。</div>
+          <div class="hook">refresh token 旋轉後舊憑證立即失效，僅最新一組有效。</div>
         </div>
         <div class="api-svg">
           <svg viewBox="0 0 460 292" role="img" aria-label="OTT 單次票證交換時序圖">
@@ -85,7 +86,7 @@
               <rect x="280" y="6" width="120" height="28" rx="5"/></g>
             <g fill="#e6ecf5" font-size="11.5" font-weight="600" text-anchor="middle"
                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-              <text x="70" y="24">客戶端</text><text x="340" y="24">SDK API</text></g>
+              <text x="70" y="24">客戶端</text><text x="340" y="24">SDK Server</text></g>
             <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
               <line x1="70" y1="34" x2="70" y2="286"/><line x1="340" y1="34" x2="340" y2="286"/></g>
             <g stroke="#4fd1c5" stroke-width="1.2" marker-end="url(#a2)">
@@ -118,8 +119,10 @@
           <div class="chips" style="margin-bottom:0">
             <span class="chip">HMAC 簽章</span>
             <span class="chip">背景佇列</span>
+            <span class="chip">限流 / 背壓</span>
             <span class="chip">失效 Token 回收</span>
           </div>
+          <div class="hook">佇列滿載或超過限流時直接回應忙碌，讓呼叫端稍後再送，不拖垮背景送出。</div>
           <div class="hook">限流以 Token 數計算，因此設計失效回收機制，把有限額度留給真正送得到的裝置。</div>
         </div>
         <div class="api-svg">
@@ -129,7 +132,7 @@
               <rect x="408" y="6" width="104" height="28" rx="5"/></g>
             <g fill="#e6ecf5" font-size="11.5" font-weight="600" text-anchor="middle"
                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-              <text x="60" y="24">呼叫端</text><text x="260" y="24">推播 API</text><text x="460" y="24">FCM</text></g>
+              <text x="60" y="24">呼叫端</text><text x="260" y="24">SDK Server</text><text x="460" y="24">FCM</text></g>
             <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
               <line x1="60" y1="34" x2="60" y2="280"/><line x1="260" y1="34" x2="260" y2="280"/>
               <line x1="460" y1="34" x2="460" y2="280"/></g>
@@ -161,10 +164,12 @@
           <h3 style="font-size:17px">第三方金流支付與派獎</h3>
           <p class="one">建立外部支付訂單、驗證回調簽章，再依遊戲別派發獎勵，並含失敗補償機制。</p>
           <div class="chips" style="margin-bottom:0">
+            <span class="chip hi">冪等 · 併發鎖</span>
             <span class="chip">Strategy Pattern</span>
             <span class="chip">回調驗簽</span>
             <span class="chip">ACK / 重試補償</span>
           </div>
+          <div class="hook">通知入口具冪等性並加上併發鎖，金流重送通知與補償重試同時進來，也不會重複派獎。</div>
           <div class="hook">派獎 Handler 採策略模式，新遊戲只要實作介面並註冊即可接上，不動既有流程。</div>
         </div>
         <div class="api-svg">
@@ -175,7 +180,7 @@
               <rect x="505" y="6" width="94" height="28" rx="5"/></g>
             <g fill="#e6ecf5" font-size="11" font-weight="600" text-anchor="middle"
                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">
-              <text x="55" y="24">商店後端</text><text x="225" y="24">支付 API</text>
+              <text x="55" y="24">商店後端</text><text x="225" y="24">SDK Server</text>
               <text x="395" y="24">金流平台</text><text x="552" y="24">遊戲伺服器</text></g>
             <g stroke="#2a3242" stroke-width="1" stroke-dasharray="3 4">
               <line x1="55" y1="34" x2="55" y2="314"/><line x1="225" y1="34" x2="225" y2="314"/>
@@ -203,6 +208,9 @@
               <text x="308" y="255">回 ACK</text>
               <text x="388" y="291">④ 派獎失敗時主動補償重試</text></g>
             <g><rect x="300" y="272" width="190" height="1" fill="#232c3a"/></g>
+            <g><rect x="64" y="212" width="150" height="24" rx="4" fill="#1a212d" stroke="#3a4658"/>
+              <text x="139" y="228" fill="#f0a54a" font-size="9.5" text-anchor="middle"
+                font-family="-apple-system,BlinkMacSystemFont,'Noto Sans TC',sans-serif">冪等 · 併發鎖，避免重複派獎</text></g>
           </svg>
         </div>
       </div>
